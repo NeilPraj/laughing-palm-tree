@@ -1,10 +1,12 @@
 package com.example.onetomanyex.controller;
 
+import com.example.onetomanyex.entities.Address;
 import com.example.onetomanyex.entities.Employee;
 import com.example.onetomanyex.repos.AddressRepository;
 import com.example.onetomanyex.repos.EmployeeRepository;
 import com.example.onetomanyex.web.FullEmployee;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,13 +31,16 @@ public class EmployeeController {
         employeeRepository.save(employee);
         return ResponseEntity.ok("SAVED");
     }
-    @PostMapping("/saveEmployeesbody")
+
+    @PostMapping(value = "/saveEmployeesbody",
+    consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> saveEmployeesBody(@RequestBody Employee employee){
         employeeRepository.save(employee);
         return ResponseEntity.ok("SAVED (requestbody) ");
     }
 
-    @PostMapping("/saveFullEmpInfo")
+    @PostMapping(value = "/saveFullEmpInfo",
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> saveFullEmployee(@RequestBody FullEmployee fullEmployee){
         employeeRepository.save(fullEmployee.getEmployee());
         addressRepository.save(fullEmployee.getAddress());
@@ -45,5 +50,10 @@ public class EmployeeController {
     @GetMapping("/getEmployees")
     public List<Employee> getEmployees(){
         return employeeRepository.findAll();
+    }
+
+    @GetMapping("/getAddress")
+    public List<Address> getAddress(){
+        return addressRepository.findAll();
     }
 }
